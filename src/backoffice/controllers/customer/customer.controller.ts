@@ -81,4 +81,16 @@ export class CustomerController {
 
     return new Result('Pet cadastrado com sucesso!', true, model, null);
   }
+
+  @Put(':document/pets/:id')
+  @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
+  async updatePet(
+    @Param('document') document,
+    @Param('id') id,
+    @Body() model: CreatePetDto,
+  ) {
+    await this._customerService.updatePet(document, id, model);
+
+    return new Result('Pet atualizado com sucesso!', true, model, null);
+  }
 }

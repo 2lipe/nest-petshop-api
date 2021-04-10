@@ -131,6 +131,32 @@ export class CustomerService {
     }
   }
 
+  public async updatePet(
+    document: string,
+    id: string,
+    data: Pet,
+  ): Promise<Customer> {
+    try {
+      const customerPet = await this._findCustomerPet(document, id);
+
+      await this._customerModel.updateOne(
+        { document, 'pets._id': id },
+        {
+          $set: {
+            'pets.$': data,
+          },
+        },
+      );
+
+      return customerPet;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Ocorreu um erro ao atualizar pet.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   private async _findCustomer(document: string): Promise<Customer | undefined> {
     try {
       const customer = await this._customerModel.findOne({ document });
@@ -141,12 +167,41 @@ export class CustomerService {
 
       return customer;
     } catch (error) {
-      if ((error.status = HttpStatus.NOT_FOUND)) {
+      if (error.status === HttpStatus.NOT_FOUND) {
         throw new NotFoundException('Cliente não encontrado');
       }
 
       throw new HttpException(
         new Result('Ocorreu um erro ao buscar cliente', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private async _findCustomerPet(
+    document: string,
+    id: string,
+  ): Promise<Customer | undefined> {
+    try {
+      const customer = await this._findCustomer(document);
+
+      const customerPet = await this._customerModel.findOne({
+        document: customer.document,
+        'pets._id': id,
+      });
+
+      if (!customerPet) {
+        throw new NotFoundException();
+      }
+
+      return customerPet;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException('Pet não encontrado');
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar pet', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

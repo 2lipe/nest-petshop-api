@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
+import { PaginationQueryDto } from '../dtos/pagination-query.dto';
 import { Address } from '../models/address.model';
 import { Customer } from '../models/customer.model';
 import { Pet } from '../models/pet.model';
@@ -161,11 +162,38 @@ export class CustomerService {
       return customer;
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
-        throw new NotFoundException(new Result('Ocorreu um erro ao buscar cliente', false, null, error));
+        throw new NotFoundException(new Result('Nenhum cliente encontrado', false, null, error));
       }
 
       throw new HttpException(
         new Result('Ocorreu um erro ao buscar cliente', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  public async query(model: PaginationQueryDto): Promise<Customer[]> {
+    try {
+      const customers = await this._customerModel
+        .find(model.query, model.fields, {
+          skip: model.skip,
+          limit: model.take,
+        })
+        .sort(model.sort)
+        .exec();
+
+      if (customers.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return customers;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Nenhum cliente encontrado', false, null, error));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar clientes', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

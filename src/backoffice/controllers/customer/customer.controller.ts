@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { CreateAddressContract } from 'src/backoffice/contracts/customer/create-address.contract';
 import { CreateCustomerContract } from 'src/backoffice/contracts/customer/create-customer.contract';
+import { CreatePaginationContract } from 'src/backoffice/contracts/customer/create-pagination.contract';
 import { CreatePetContract } from 'src/backoffice/contracts/customer/create-pet.contract';
 import { CreateAddressDto } from 'src/backoffice/dtos/create-address.dto';
 import { CreateCustomerDto } from 'src/backoffice/dtos/create-customer.dto';
 import { CreatePetDto } from 'src/backoffice/dtos/create-pet.dto';
+import { PaginationQueryDto } from 'src/backoffice/dtos/pagination-query.dto';
 import { Customer } from 'src/backoffice/models/customer.model';
 import { Result } from 'src/backoffice/models/result.model';
 import { User } from 'src/backoffice/models/user.model';
@@ -73,5 +75,13 @@ export class CustomerController {
     const res = await this._customerService.find(document);
 
     return new Result('Busca por cliente realizada com sucesso!', true, res, null);
+  }
+
+  @Post('query')
+  @UseInterceptors(new ValidatorInterceptor(new CreatePaginationContract()))
+  async query(@Body() model: PaginationQueryDto) {
+    const res = await this._customerService.query(model);
+
+    return new Result('Busca por clientes realizada com sucesso!', true, res, null);
   }
 }

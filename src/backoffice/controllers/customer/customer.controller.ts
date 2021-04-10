@@ -10,8 +10,10 @@ import {
 } from '@nestjs/common';
 import { CreateAddressContract } from 'src/backoffice/contracts/customer/create-address.contract';
 import { CreateCustomerContract } from 'src/backoffice/contracts/customer/create-customer.contract';
+import { CreatePetContract } from 'src/backoffice/contracts/customer/create-pet.contract';
 import { CreateAddressDto } from 'src/backoffice/dtos/create-address.dto';
 import { CreateCustomerDto } from 'src/backoffice/dtos/create-customer.dto';
+import { CreatePetDto } from 'src/backoffice/dtos/create-pet.dto';
 import { Customer } from 'src/backoffice/models/customer.model';
 import { Result } from 'src/backoffice/models/result.model';
 import { User } from 'src/backoffice/models/user.model';
@@ -27,16 +29,6 @@ export class CustomerController {
     private readonly _customerService: CustomerService,
   ) {}
 
-  @Get()
-  get() {
-    return new Result(null, true, [], null);
-  }
-
-  @Get(':document')
-  getById(@Param('document') document) {
-    return new Result(null, true, {}, null);
-  }
-
   @Post()
   @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
@@ -48,7 +40,7 @@ export class CustomerController {
       model.name,
       model.document,
       model.email,
-      null,
+      [],
       null,
       null,
       null,
@@ -82,13 +74,11 @@ export class CustomerController {
     return new Result('Endereço cadastrado com sucesso!', true, model, null);
   }
 
-  @Put(':document')
-  put(@Param('document') document, @Body() body) {
-    return new Result('Cliente alterado com sucesso', true, body, null);
-  }
+  @Post(':document/pets')
+  @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
+  async addPet(@Param('document') document, @Body() model: CreatePetDto) {
+    await this._customerService.createPet(document, model);
 
-  @Delete(':document')
-  delete(@Param('document') document) {
-    return new Result('Cliente removido com sucesso', true, null, null);
+    return new Result('Pet cadastrado com sucesso!', true, model, null);
   }
 }

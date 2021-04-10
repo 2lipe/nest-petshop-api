@@ -96,7 +96,7 @@ export class CustomerService {
     } catch (error) {
       throw new HttpException(
         new Result(
-          'Ocorreu um erro ao cadastrar endereço de',
+          'Ocorreu um erro ao cadastrar endereço de entrega.',
           false,
           null,
           error,
@@ -106,17 +106,30 @@ export class CustomerService {
     }
   }
 
-  // public async createPet(document: string, data: Pet): Promise<Customer> {
-  //   try {
-  //     const options = { upsert: true, new: true };
+  public async createPet(document: string, data: Pet): Promise<Customer> {
+    try {
+      const options = { upsert: true, new: true };
 
-  //     const customer = await this._customerModel.findOne({ document });
+      const customer = await this._findCustomer(document);
 
-  //     if (!customer) {
-  //       throw new NotFoundException();
-  //     }
-  //   } catch (error) {}
-  // }
+      await this._customerModel.updateOne(
+        { document },
+        {
+          $push: {
+            pets: data,
+          },
+        },
+        options,
+      );
+
+      return customer;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Ocorreu um erro ao cadastrar pet.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 
   private async _findCustomer(document: string): Promise<Customer | undefined> {
     try {

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { Customer } from '../models/customer.model';
+import { Result } from '../models/result.model';
 
 interface CustomerModel extends Customer, Document {}
 
@@ -13,10 +14,22 @@ export class CustomerService {
   ) {}
 
   public async create(data: Customer): Promise<Customer> {
-    const customer = new this._customerModel(data);
+    try {
+      const customer = new this._customerModel(data);
 
-    const newCustomer = await customer.save();
+      const newCustomer = await customer.save();
 
-    return newCustomer;
+      return newCustomer;
+    } catch (error) {
+      throw new HttpException(
+        new Result(
+          'Ocorreu um erro ao realizar o cadastro do cliente.',
+          false,
+          null,
+          error,
+        ),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

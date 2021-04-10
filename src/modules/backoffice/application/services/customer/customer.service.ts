@@ -32,7 +32,7 @@ export class CustomerService {
 
   public async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
     try {
-      const customer = await this._findCustomer(document);
+      const customer = await this.findCustomer(document);
 
       if (!customer) {
         throw new NotFoundException();
@@ -119,7 +119,7 @@ export class CustomerService {
     }
   }
 
-  private async _findCustomer(document: string): Promise<Customer | undefined> {
+  public async findCustomer(document: string): Promise<Customer | undefined> {
     try {
       const customer = await this._customerModel.findOne({ document });
 

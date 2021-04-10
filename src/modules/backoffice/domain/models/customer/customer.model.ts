@@ -11,7 +11,7 @@ export class Customer {
     public pets: Pet[],
     public billingAddress: Address,
     public shippingAddress: Address,
-    public creditCard: CreditCard,
+    public card: CreditCard,
     public user: User,
   ) {}
 }

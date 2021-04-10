@@ -10,6 +10,8 @@ import { AccountService } from 'src/modules/backoffice/application/services/acco
 import { AddressService } from 'src/modules/backoffice/application/services/customer/address.service';
 import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
 import { PetService } from 'src/modules/backoffice/application/services/customer/pet.service';
+import { CreditCardController } from 'src/modules/backoffice/api/controllers/customer/credit-card.controller';
+import { CreditCardService } from 'src/modules/backoffice/application/services/customer/credit-card.service';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { PetService } from 'src/modules/backoffice/application/services/customer
       },
     ]),
   ],
-  controllers: [AddressController, PetController, CustomerController],
-  providers: [AccountService, AddressService, PetService, CustomerService],
+  controllers: [AddressController, PetController, CreditCardController, CustomerController],
+  providers: [AccountService, AddressService, PetService, CreditCardService, CustomerService],
 })
 export class BackofficeModule {}

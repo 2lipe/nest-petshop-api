@@ -4,6 +4,7 @@ import { Model, Document } from 'mongoose';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
 import { Pet } from 'src/modules/backoffice/domain/models/customer/pet.model';
 import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
 
 interface CustomerModel extends Customer, Document {}
 
@@ -12,13 +13,14 @@ export class PetService {
   constructor(
     @InjectModel('Customer')
     private readonly _customerModel: Model<CustomerModel>,
+    private readonly _customerService: CustomerService,
   ) {}
 
   public async createPet(document: string, data: Pet): Promise<Customer> {
     try {
       const options = { upsert: true, new: true };
 
-      const customer = await this._findCustomer(document);
+      const customer = await this._customerService.findCustomer(document);
 
       await this._customerModel.updateOne(
         { document },
@@ -62,30 +64,9 @@ export class PetService {
     }
   }
 
-  private async _findCustomer(document: string): Promise<Customer | undefined> {
-    try {
-      const customer = await this._customerModel.findOne({ document });
-
-      if (!customer) {
-        throw new NotFoundException();
-      }
-
-      return customer;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw new NotFoundException('Cliente não encontrado');
-      }
-
-      throw new HttpException(
-        new Result('Ocorreu um erro ao buscar cliente', false, null, error),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
   private async _findCustomerPet(document: string, id: string): Promise<Customer | undefined> {
     try {
-      const customer = await this._findCustomer(document);
+      const customer = await this._customerService.findCustomer(document);
 
       const customerPet = await this._customerModel.findOne({
         document: customer.document,

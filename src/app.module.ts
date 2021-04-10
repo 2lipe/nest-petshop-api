@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { BackofficeModule } from './backoffice/backoffice.module';
-import { ServicesService } from './customer/backoffice/services/services.service';
 
 @Module({
   imports: [
@@ -10,6 +9,5 @@ import { ServicesService } from './customer/backoffice/services/services.service
     BackofficeModule,
   ],
   controllers: [],
-  providers: [ServicesService],
 })
 export class AppModule {}

@@ -10,15 +10,20 @@ import {
 } from '@nestjs/common';
 import { CreateCustomerContract } from 'src/backoffice/contracts/customer.contracts';
 import { CreateCustomerDto } from 'src/backoffice/dtos/create-customer.dto';
+import { Customer } from 'src/backoffice/models/customer.model';
 import { Result } from 'src/backoffice/models/result.model';
 import { User } from 'src/backoffice/models/user.model';
 import { AccountService } from 'src/backoffice/services/account.service';
+import { CustomerService } from 'src/backoffice/services/customer.service';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 
 // localhost:5000/api/v1/customers
 @Controller('v1/customers')
 export class CustomerController {
-  constructor(private readonly _accountService: AccountService) {}
+  constructor(
+    private readonly _accountService: AccountService,
+    private readonly _customerService: CustomerService,
+  ) {}
 
   @Get()
   get() {
@@ -37,7 +42,20 @@ export class CustomerController {
       new User(model.document, model.password, true),
     );
 
-    return new Result('Cliente cadastrado com sucesso!', true, user, null);
+    const customer = new Customer(
+      model.name,
+      model.document,
+      model.email,
+      null,
+      null,
+      null,
+      null,
+      user,
+    );
+
+    const res = await this._customerService.create(customer);
+
+    return new Result('Cliente cadastrado com sucesso!', true, res, null);
   }
 
   @Put(':document')

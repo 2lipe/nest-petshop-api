@@ -11,4 +11,12 @@ export class CustomerService {
     @InjectModel('Customer')
     private readonly _customerModel: Model<CustomerModel>,
   ) {}
+
+  public async create(data: Customer): Promise<Customer> {
+    const customer = new this._customerModel(data);
+
+    const newCustomer = await customer.save();
+
+    return newCustomer;
+  }
 }

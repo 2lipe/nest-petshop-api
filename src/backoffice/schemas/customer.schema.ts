@@ -1,12 +1,17 @@
 import * as mongoose from 'mongoose';
 
 export const CustomerSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
+  // firstName: {
+  //   type: String,
+  //   required: true,
+  // },
 
-  lastName: {
+  // lastName: {
+  //   type: String,
+  //   required: true,
+  // },
+
+  name: {
     type: String,
     required: true,
   },

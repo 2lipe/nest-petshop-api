@@ -8,7 +8,9 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateCustomerContract } from 'src/backoffice/contracts/customer.contracts';
+import { CreateAddressContract } from 'src/backoffice/contracts/customer/create-address.contract';
+import { CreateCustomerContract } from 'src/backoffice/contracts/customer/create-customer.contract';
+import { CreateAddressDto } from 'src/backoffice/dtos/create-address.dto';
 import { CreateCustomerDto } from 'src/backoffice/dtos/create-customer.dto';
 import { Customer } from 'src/backoffice/models/customer.model';
 import { Result } from 'src/backoffice/models/result.model';
@@ -56,6 +58,17 @@ export class CustomerController {
     const res = await this._customerService.create(customer);
 
     return new Result('Cliente cadastrado com sucesso!', true, res, null);
+  }
+
+  @Post(':document/addresses/billing')
+  @UseInterceptors(new ValidatorInterceptor(new CreateAddressContract()))
+  async addBillingAddress(
+    @Param('document') document,
+    @Body() model: CreateAddressDto,
+  ) {
+    const res = await this._customerService.addBillingAddress(document, model);
+
+    return new Result('Endereço cadastrado com sucesso!', true, res, null);
   }
 
   @Put(':document')

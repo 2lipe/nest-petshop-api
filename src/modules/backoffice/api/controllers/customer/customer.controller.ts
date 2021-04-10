@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { CreateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/create-customer.contract';
 import { CreatePaginationContract } from 'src/modules/backoffice/domain/contracts/create-pagination.contract';
 import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
@@ -9,6 +9,8 @@ import { User } from 'src/modules/backoffice/domain/models/user.model';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
 import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
+import { UpdateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/update-customer.contract';
+import { UpdateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/update-customer.dto';
 
 // localhost:5000/api/v1/customers
 @Controller('v1/customers')
@@ -25,6 +27,14 @@ export class CustomerController {
     const res = await this._customerService.create(customer);
 
     return new Result('Cliente cadastrado com sucesso!', true, res, null);
+  }
+
+  @Put(':document')
+  @UseInterceptors(new ValidatorInterceptor(new UpdateCustomerContract()))
+  async update(@Param('document') document, @Body() model: UpdateCustomerDto) {
+    const res = await this._customerService.update(document, model);
+
+    return new Result('Cliente atualizado com sucesso!', true, res, null);
   }
 
   @Get()

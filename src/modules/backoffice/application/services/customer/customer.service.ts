@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
+import { UpdateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/update-customer.dto';
 import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
 import { Result } from 'src/modules/backoffice/domain/models/result.model';
@@ -24,6 +25,25 @@ export class CustomerService {
     } catch (error) {
       throw new HttpException(
         new Result('Ocorreu um erro ao realizar o cadastro do cliente.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  public async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
+    try {
+      const customer = await this._findCustomer(document);
+
+      if (!customer) {
+        throw new NotFoundException();
+      }
+
+      await this._customerModel.update({ document }, data);
+
+      return customer;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Ocorreu um erro ao atualizar cliente', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -94,6 +114,27 @@ export class CustomerService {
 
       throw new HttpException(
         new Result('Ocorreu um erro ao buscar clientes', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private async _findCustomer(document: string): Promise<Customer | undefined> {
+    try {
+      const customer = await this._customerModel.findOne({ document });
+
+      if (!customer) {
+        throw new NotFoundException();
+      }
+
+      return customer;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException('Cliente não encontrado');
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar cliente', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

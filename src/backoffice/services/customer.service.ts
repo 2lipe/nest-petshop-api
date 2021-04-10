@@ -150,6 +150,27 @@ export class CustomerService {
     }
   }
 
+  public async find(document: string): Promise<Customer> {
+    try {
+      const customer = await this._customerModel.findOne({ document }).populate('user', 'username').exec();
+
+      if (!customer) {
+        throw new NotFoundException();
+      }
+
+      return customer;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Ocorreu um erro ao buscar cliente', false, null, error));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar cliente', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   private async _findCustomer(document: string): Promise<Customer | undefined> {
     try {
       const customer = await this._customerModel.findOne({ document });

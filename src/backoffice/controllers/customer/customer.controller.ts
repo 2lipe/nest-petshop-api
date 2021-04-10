@@ -67,4 +67,11 @@ export class CustomerController {
 
     return new Result('Busca de clientes realizada com sucesso!', true, res, null);
   }
+
+  @Get(':document')
+  async get(@Param('document') document) {
+    const res = await this._customerService.find(document);
+
+    return new Result('Busca por cliente realizada com sucesso!', true, res, null);
+  }
 }

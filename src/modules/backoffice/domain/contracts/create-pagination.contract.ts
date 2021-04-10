@@ -10,7 +10,11 @@ export class CreatePaginationContract implements Contract {
   validate(model: PaginationQueryDto): boolean {
     const flunt = new Flunt();
 
-    flunt.hasMaxLen(model.take, 1000, 'Busca máxima de 1000 registros');
+    if (!model.query) {
+      model.query = {};
+    }
+
+    flunt.isGreaterThan(model.take, 1000, 'Busca máxima de 1000 registros');
 
     this.errors = flunt.errors;
 

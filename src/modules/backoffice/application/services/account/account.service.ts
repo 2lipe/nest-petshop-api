@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
-import { Result } from '../models/result.model';
-import { User } from '../models/user.model';
+import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { User } from 'src/modules/backoffice/domain/models/user.model';
 
 interface UserModel extends User, Document {}
 
@@ -24,8 +24,4 @@ export class AccountService {
       );
     }
   }
-
-  // public update(data: User) {
-  //   const user = new this._userModel(data);
-  // }
 }

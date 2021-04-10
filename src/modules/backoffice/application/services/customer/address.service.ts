@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
-import { Address } from '../models/address.model';
-import { Customer } from '../models/customer.model';
-import { Result } from '../models/result.model';
+import { Address } from 'src/modules/backoffice/domain/models/customer/address.model';
+import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
+import { Result } from 'src/modules/backoffice/domain/models/result.model';
 
 interface CustomerModel extends Customer, Document {}
 

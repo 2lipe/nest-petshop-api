@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Post, Put, UseInterceptors } from '@nestjs/common';
-import { CreatePetContract } from 'src/modules/backoffice/contracts/customer/create-pet.contract';
-import { CreatePetDto } from 'src/modules/backoffice/dtos/create-pet.dto';
-import { Result } from 'src/modules/backoffice/models/result.model';
+import { CreatePetContract } from 'src/modules/backoffice/domain/contracts/customer/create-pet.contract';
+import { CreatePetDto } from 'src/modules/backoffice/domain/dtos/customer/create-pet.dto';
+import { Result } from 'src/modules/backoffice/domain/models/result.model';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
-import { PetService } from 'src/modules/backoffice/services/pet.service';
+import { PetService } from 'src/modules/backoffice/application/services/customer/pet.service';
 
 // localhost:5000/api/v1/pets
 @Controller('v1/pets')

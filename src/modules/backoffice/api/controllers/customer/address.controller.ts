@@ -1,9 +1,9 @@
 import { Body, Controller, Param, Post, UseInterceptors } from '@nestjs/common';
-import { CreateAddressContract } from 'src/modules/backoffice/contracts/customer/create-address.contract';
-import { Result } from 'src/modules/backoffice/models/result.model';
+import { CreateAddressContract } from 'src/modules/backoffice/domain/contracts/customer/create-address.contract';
+import { Result } from 'src/modules/backoffice/domain/models/result.model';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
-import { AddressService } from 'src/modules/backoffice/services/address.service';
-import { CreateAddressDto } from 'src/modules/backoffice/dtos/create-address.dto';
+import { AddressService } from 'src/modules/backoffice/application/services/customer/address.service';
+import { CreateAddressDto } from 'src/modules/backoffice/domain/dtos/customer/create-address.dto';
 
 // localhost:5000/api/v1/addresses
 @Controller('v1/addresses')

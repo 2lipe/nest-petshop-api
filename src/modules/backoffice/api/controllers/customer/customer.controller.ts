@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
-import { CreateCustomerContract } from 'src/modules/backoffice/contracts/customer/create-customer.contract';
-import { CreatePaginationContract } from 'src/modules/backoffice/contracts/customer/create-pagination.contract';
-import { CreateCustomerDto } from 'src/modules/backoffice/dtos/create-customer.dto';
-import { PaginationQueryDto } from 'src/modules/backoffice/dtos/pagination-query.dto';
-import { Customer } from 'src/modules/backoffice/models/customer.model';
-import { Result } from 'src/modules/backoffice/models/result.model';
-import { User } from 'src/modules/backoffice/models/user.model';
-import { AccountService } from 'src/modules/backoffice/services/account.service';
-import { CustomerService } from 'src/modules/backoffice/services/customer.service';
+import { CreateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/create-customer.contract';
+import { CreatePaginationContract } from 'src/modules/backoffice/domain/contracts/create-pagination.contract';
+import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
+import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
+import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
+import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { User } from 'src/modules/backoffice/domain/models/user.model';
+import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
+import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 
 // localhost:5000/api/v1/customers

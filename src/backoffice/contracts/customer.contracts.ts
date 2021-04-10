@@ -1,22 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Flunt } from 'src/helpers/flunt.helper';
-import { Customer } from '../models/customer.model';
+import { CreateCustomerDto } from '../dtos/create-customer.dto';
 import { Contract } from './contract';
 
 @Injectable()
 export class CreateCustomerContract implements Contract {
   errors: any[];
 
-  validate(model: Customer): boolean {
+  validate(model: CreateCustomerDto): boolean {
     const flunt = new Flunt();
 
-    flunt.hasMinLen(model.name, 5, 'Nome inválido.');
+    flunt.hasMinLen(model.name, 5, 'Nome inválido mínimo 5 caracteres.');
     flunt.isEmail(model.email, 'Email inválido.');
     flunt.isFixedLen(model.document, 11, 'CPF inválido.');
-    flunt.hasMinLen(model.password, 6, 'Senha inválida.');
-
-    flunt.hasMinLen(model.creditCard.number, 16, 'Numero inválido');
-    flunt.hasMaxLen(model.creditCard.number, 16, 'Numero inválido');
+    flunt.hasMinLen(model.password, 6, 'Senha inválida mínimo 6 caracteres.');
 
     this.errors = flunt.errors;
 

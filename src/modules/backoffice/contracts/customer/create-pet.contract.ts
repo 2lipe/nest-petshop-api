@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePetDto } from 'src/backoffice/dtos/create-pet.dto';
+import { CreatePetDto } from 'src/modules/backoffice/dtos/create-pet.dto';
 import { Flunt } from 'src/helpers/flunt.helper';
 import { Contract } from '../contract';
 

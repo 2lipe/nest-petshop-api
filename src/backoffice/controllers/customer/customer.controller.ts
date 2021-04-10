@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { CreateAddressContract } from 'src/backoffice/contracts/customer/create-address.contract';
 import { CreateCustomerContract } from 'src/backoffice/contracts/customer/create-customer.contract';
 import { CreatePetContract } from 'src/backoffice/contracts/customer/create-pet.contract';
@@ -24,28 +15,14 @@ import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 // localhost:5000/api/v1/customers
 @Controller('v1/customers')
 export class CustomerController {
-  constructor(
-    private readonly _accountService: AccountService,
-    private readonly _customerService: CustomerService,
-  ) {}
+  constructor(private readonly _accountService: AccountService, private readonly _customerService: CustomerService) {}
 
   @Post()
   @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
-    const user = await this._accountService.create(
-      new User(model.document, model.password, true),
-    );
+    const user = await this._accountService.create(new User(model.document, model.password, true));
 
-    const customer = new Customer(
-      model.name,
-      model.document,
-      model.email,
-      [],
-      null,
-      null,
-      null,
-      user,
-    );
+    const customer = new Customer(model.name, model.document, model.email, [], null, null, null, user);
 
     const res = await this._customerService.create(customer);
 
@@ -54,10 +31,7 @@ export class CustomerController {
 
   @Post(':document/addresses/billing')
   @UseInterceptors(new ValidatorInterceptor(new CreateAddressContract()))
-  async addBillingAddress(
-    @Param('document') document,
-    @Body() model: CreateAddressDto,
-  ) {
+  async addBillingAddress(@Param('document') document, @Body() model: CreateAddressDto) {
     await this._customerService.addBillingAddress(document, model);
 
     return new Result('Endereço cadastrado com sucesso!', true, model, null);
@@ -65,10 +39,7 @@ export class CustomerController {
 
   @Post(':document/addresses/shipping')
   @UseInterceptors(new ValidatorInterceptor(new CreateAddressContract()))
-  async addShippingAddress(
-    @Param('document') document,
-    @Body() model: CreateAddressDto,
-  ) {
+  async addShippingAddress(@Param('document') document, @Body() model: CreateAddressDto) {
     await this._customerService.addShippingAddress(document, model);
 
     return new Result('Endereço cadastrado com sucesso!', true, model, null);
@@ -84,11 +55,7 @@ export class CustomerController {
 
   @Put(':document/pets/:id')
   @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
-  async updatePet(
-    @Param('document') document,
-    @Param('id') id,
-    @Body() model: CreatePetDto,
-  ) {
+  async updatePet(@Param('document') document, @Param('id') id, @Body() model: CreatePetDto) {
     await this._customerService.updatePet(document, id, model);
 
     return new Result('Pet atualizado com sucesso!', true, model, null);

@@ -8,9 +8,7 @@ interface UserModel extends User, Document {}
 
 @Injectable()
 export class AccountService {
-  constructor(
-    @InjectModel('User') private readonly _userModel: Model<UserModel>,
-  ) {}
+  constructor(@InjectModel('User') private readonly _userModel: Model<UserModel>) {}
 
   public async create(data: User): Promise<User> {
     try {
@@ -21,12 +19,7 @@ export class AccountService {
       return newUser;
     } catch (error) {
       throw new HttpException(
-        new Result(
-          'Ocorreu um erro ao realizar o cadastro de usuário',
-          false,
-          null,
-          error,
-        ),
+        new Result('Ocorreu um erro ao realizar o cadastro de usuário', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

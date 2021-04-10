@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { Address } from '../models/address.model';
@@ -29,21 +24,13 @@ export class CustomerService {
       return newCustomer;
     } catch (error) {
       throw new HttpException(
-        new Result(
-          'Ocorreu um erro ao realizar o cadastro do cliente.',
-          false,
-          null,
-          error,
-        ),
+        new Result('Ocorreu um erro ao realizar o cadastro do cliente.', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }
   }
 
-  public async addBillingAddress(
-    document: string,
-    data: Address,
-  ): Promise<Customer | undefined> {
+  public async addBillingAddress(document: string, data: Address): Promise<Customer | undefined> {
     try {
       const options = { upsert: true };
 
@@ -62,21 +49,13 @@ export class CustomerService {
       return customer;
     } catch (error) {
       throw new HttpException(
-        new Result(
-          'Ocorreu um erro ao cadastrar endereço de cobrança.',
-          false,
-          null,
-          error,
-        ),
+        new Result('Ocorreu um erro ao cadastrar endereço de cobrança.', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }
   }
 
-  public async addShippingAddress(
-    document: string,
-    data: Address,
-  ): Promise<Customer | undefined> {
+  public async addShippingAddress(document: string, data: Address): Promise<Customer | undefined> {
     try {
       const options = { upsert: true };
 
@@ -95,12 +74,7 @@ export class CustomerService {
       return customer;
     } catch (error) {
       throw new HttpException(
-        new Result(
-          'Ocorreu um erro ao cadastrar endereço de entrega.',
-          false,
-          null,
-          error,
-        ),
+        new Result('Ocorreu um erro ao cadastrar endereço de entrega.', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -131,11 +105,7 @@ export class CustomerService {
     }
   }
 
-  public async updatePet(
-    document: string,
-    id: string,
-    data: Pet,
-  ): Promise<Customer> {
+  public async updatePet(document: string, id: string, data: Pet): Promise<Customer> {
     try {
       const customerPet = await this._findCustomerPet(document, id);
 
@@ -143,6 +113,7 @@ export class CustomerService {
         { document, 'pets._id': id },
         {
           $set: {
+            //$ busca o index do pet no mongo, atualiza o objeto do index
             'pets.$': data,
           },
         },
@@ -178,10 +149,7 @@ export class CustomerService {
     }
   }
 
-  private async _findCustomerPet(
-    document: string,
-    id: string,
-  ): Promise<Customer | undefined> {
+  private async _findCustomerPet(document: string, id: string): Promise<Customer | undefined> {
     try {
       const customer = await this._findCustomer(document);
 
@@ -200,10 +168,7 @@ export class CustomerService {
         throw new NotFoundException('Pet não encontrado');
       }
 
-      throw new HttpException(
-        new Result('Ocorreu um erro ao buscar pet', false, null, error),
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(new Result('Ocorreu um erro ao buscar pet', false, null, error), HttpStatus.BAD_REQUEST);
     }
   }
 }

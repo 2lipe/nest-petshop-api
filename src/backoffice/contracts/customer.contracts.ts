@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Flunt } from 'src/helpers/flunt';
+import { Flunt } from 'src/helpers/flunt.helper';
 import { Customer } from '../models/customer.model';
 import { Contract } from './contract';
 

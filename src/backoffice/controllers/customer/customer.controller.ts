@@ -66,9 +66,20 @@ export class CustomerController {
     @Param('document') document,
     @Body() model: CreateAddressDto,
   ) {
-    const res = await this._customerService.addBillingAddress(document, model);
+    await this._customerService.addBillingAddress(document, model);
 
-    return new Result('Endereço cadastrado com sucesso!', true, res, null);
+    return new Result('Endereço cadastrado com sucesso!', true, model, null);
+  }
+
+  @Post(':document/addresses/shipping')
+  @UseInterceptors(new ValidatorInterceptor(new CreateAddressContract()))
+  async addShippingAddress(
+    @Param('document') document,
+    @Body() model: CreateAddressDto,
+  ) {
+    await this._customerService.addShippingAddress(document, model);
+
+    return new Result('Endereço cadastrado com sucesso!', true, model, null);
   }
 
   @Put(':document')

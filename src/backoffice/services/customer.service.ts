@@ -81,4 +81,47 @@ export class CustomerService {
       );
     }
   }
+
+  public async addShippingAddress(
+    document: string,
+    data: Address,
+  ): Promise<Customer | undefined> {
+    try {
+      const options = { upsert: true };
+
+      const customer = await this._customerModel.findOne({ document });
+
+      if (!customer) {
+        throw new NotFoundException();
+      }
+
+      await this._customerModel.updateOne(
+        { document },
+        {
+          $set: {
+            shippingAddress: data,
+          },
+        },
+        options,
+      );
+
+      return customer;
+    } catch (error) {
+      if ((error.status = HttpStatus.NOT_FOUND)) {
+        throw new NotFoundException(
+          new Result('Usuário não encontrado.', false, null, error),
+        );
+      }
+
+      throw new HttpException(
+        new Result(
+          'Ocorreu um erro ao atualizar endereço do cliente',
+          false,
+          null,
+          error,
+        ),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

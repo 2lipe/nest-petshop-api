@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { CreateAddressContract } from 'src/backoffice/contracts/customer/create-address.contract';
 import { CreateCustomerContract } from 'src/backoffice/contracts/customer/create-customer.contract';
 import { CreatePetContract } from 'src/backoffice/contracts/customer/create-pet.contract';
@@ -59,5 +59,12 @@ export class CustomerController {
     await this._customerService.updatePet(document, id, model);
 
     return new Result('Pet atualizado com sucesso!', true, model, null);
+  }
+
+  @Get()
+  async getAll() {
+    const res = await this._customerService.findAll();
+
+    return new Result('Busca de clientes realizada com sucesso!', true, res, null);
   }
 }

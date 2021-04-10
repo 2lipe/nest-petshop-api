@@ -128,6 +128,28 @@ export class CustomerService {
     }
   }
 
+  public async findAll(): Promise<Customer[]> {
+    try {
+      // Caso queira buscar todos menos algum campo Ex: ('-name').exec(), em branco tras todas as informações
+      const customers = await this._customerModel.find({}, 'name email document').sort('name').exec();
+
+      if (customers.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return customers;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Nenhum cliente encontrado', false, null, error));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar clientes', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   private async _findCustomer(document: string): Promise<Customer | undefined> {
     try {
       const customer = await this._customerModel.findOne({ document });

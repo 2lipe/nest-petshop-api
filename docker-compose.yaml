@@ -1,0 +1,15 @@
+version: '2.4'
+
+services:
+  db:
+    image: mongo:4.0.17-xenial
+    container_name: 'petshop-mongo_db'
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=petshop
+    volumes:
+      - db-data:/data/db:delegated
+
+volumes:
+  db-data:

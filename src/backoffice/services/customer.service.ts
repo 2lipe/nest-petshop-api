@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { Address } from '../models/address.model';
 import { Customer } from '../models/customer.model';
+import { Pet } from '../models/pet.model';
 import { Result } from '../models/result.model';
 
 interface CustomerModel extends Customer, Document {}
@@ -46,11 +47,7 @@ export class CustomerService {
     try {
       const options = { upsert: true };
 
-      const customer = await this._customerModel.findOne({ document });
-
-      if (!customer) {
-        throw new NotFoundException();
-      }
+      const customer = await this._findCustomer(document);
 
       await this._customerModel.updateOne(
         { document },
@@ -64,15 +61,9 @@ export class CustomerService {
 
       return customer;
     } catch (error) {
-      if ((error.status = HttpStatus.NOT_FOUND)) {
-        throw new NotFoundException(
-          new Result('Usuário não encontrado.', false, null, error),
-        );
-      }
-
       throw new HttpException(
         new Result(
-          'Ocorreu um erro ao atualizar endereço do cliente',
+          'Ocorreu um erro ao cadastrar endereço de cobrança.',
           false,
           null,
           error,
@@ -89,11 +80,7 @@ export class CustomerService {
     try {
       const options = { upsert: true };
 
-      const customer = await this._customerModel.findOne({ document });
-
-      if (!customer) {
-        throw new NotFoundException();
-      }
+      const customer = await this._findCustomer(document);
 
       await this._customerModel.updateOne(
         { document },
@@ -107,19 +94,46 @@ export class CustomerService {
 
       return customer;
     } catch (error) {
-      if ((error.status = HttpStatus.NOT_FOUND)) {
-        throw new NotFoundException(
-          new Result('Usuário não encontrado.', false, null, error),
-        );
-      }
-
       throw new HttpException(
         new Result(
-          'Ocorreu um erro ao atualizar endereço do cliente',
+          'Ocorreu um erro ao cadastrar endereço de',
           false,
           null,
           error,
         ),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  // public async createPet(document: string, data: Pet): Promise<Customer> {
+  //   try {
+  //     const options = { upsert: true, new: true };
+
+  //     const customer = await this._customerModel.findOne({ document });
+
+  //     if (!customer) {
+  //       throw new NotFoundException();
+  //     }
+  //   } catch (error) {}
+  // }
+
+  private async _findCustomer(document: string): Promise<Customer | undefined> {
+    try {
+      const customer = await this._customerModel.findOne({ document });
+
+      if (!customer) {
+        throw new NotFoundException();
+      }
+
+      return customer;
+    } catch (error) {
+      if ((error.status = HttpStatus.NOT_FOUND)) {
+        throw new NotFoundException('Cliente não encontrado');
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar cliente', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, UseInterceptors } from '@nestjs/common';
 import { CreateAddressContract } from 'src/modules/backoffice/domain/contracts/customer/create-address.contract';
-import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { Result } from 'src/shared/result/result';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 import { AddressService } from 'src/modules/backoffice/application/services/customer/address.service';
 import { CreateAddressDto } from 'src/modules/backoffice/domain/dtos/customer/create-address.dto';

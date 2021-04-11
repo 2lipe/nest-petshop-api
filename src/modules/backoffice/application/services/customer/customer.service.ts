@@ -4,7 +4,7 @@ import { Model, Document } from 'mongoose';
 import { UpdateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/update-customer.dto';
 import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
-import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { Result } from 'src/shared/result/result';
 
 interface CustomerModel extends Customer, Document {}
 

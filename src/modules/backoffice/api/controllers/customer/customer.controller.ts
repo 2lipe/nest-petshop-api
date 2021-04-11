@@ -4,7 +4,7 @@ import { CreatePaginationContract } from 'src/shared/contracts/create-pagination
 import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
 import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
-import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { Result } from 'src/shared/result/result';
 import { User } from 'src/modules/backoffice/domain/models/user.model';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
 import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';

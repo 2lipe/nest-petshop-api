@@ -2,9 +2,10 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { Result } from 'src/shared/result/result';
 import { ProductEntity } from 'src/modules/store/domain/entities/product.entity';
 import { CreateProductDto } from 'src/modules/store/domain/dtos/product/create-product.dto';
-import { Result } from 'src/shared/result/result';
+import { UpdateProductDto } from 'src/modules/store/domain/dtos/product/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -50,8 +51,23 @@ export class ProductService {
     }
   }
 
-  public async updateProduct(id: string, product: ProductEntity): Promise<void> {
-    await this._productRepository.update(id, product);
+  public async updateProduct(id: string, data: UpdateProductDto): Promise<ProductEntity> {
+    try {
+      const product = await this.findProductById(id);
+
+      if (!product) {
+        throw new NotFoundException();
+      }
+
+      await this._productRepository.update(product.id, data);
+
+      return product;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Ocorreu um erro ao atualizar dados do produto.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   public async deleteProduct(id: string): Promise<void> {

@@ -1,7 +1,7 @@
 version: '2.4'
 
 services:
-  db:
+  mongo:
     image: mongo:4.0.17-xenial
     container_name: 'petshop-mongo_db'
     ports:
@@ -11,5 +11,21 @@ services:
     volumes:
       - db-data:/data/db:delegated
 
+  mysql:
+    image: mysql:5.7
+    container_name: 'petshop-mysql_db'
+    environment:
+      MYSQL_DATABASE: 'petshop_db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'reallyStrongPwd123'
+      MYSQL_ROOT_PASSWORD: 'reallyStrongRootPwd123'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+
 volumes:
   db-data:
+  my-db:

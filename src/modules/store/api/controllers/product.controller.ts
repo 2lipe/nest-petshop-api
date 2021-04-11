@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { ValidatorInterceptor } from 'src/shared/interceptors/validator.interceptor';
 import { ProductService } from 'src/modules/store/application/services/product.service';
 import { CreateProductContract } from 'src/modules/store/domain/contracts/create-product.contract';
@@ -16,5 +16,12 @@ export class ProductController {
     const res = await this._productService.addProduct(data);
 
     return new Result('Produto cadastrado com sucesso!', true, res, null);
+  }
+
+  @Get(':id')
+  async findProduct(@Param('id') id: string) {
+    const res = await this._productService.findProductById(id);
+
+    return new Result('Produto encontrado com sucesso!', true, res, null);
   }
 }

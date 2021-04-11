@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -29,8 +29,25 @@ export class ProductService {
     return await this._productRepository.find();
   }
 
-  public async findPoduct(): Promise<ProductEntity> {
-    return await this._productRepository.findOne();
+  public async findProductById(id: string): Promise<ProductEntity> {
+    try {
+      const product = await this._productRepository.findOne({ where: { id } });
+
+      if (!product) {
+        throw new NotFoundException();
+      }
+
+      return product;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Produto não encontrado.', false, null, error));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar produto.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   public async updateProduct(id: string, product: ProductEntity): Promise<void> {

@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, UseInterceptors } from '@nestjs/common';
 import { Result } from 'src/shared/result/result';
-import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
+import { ValidatorInterceptor } from 'src/shared/interceptors/validator.interceptor';
 import { CreditCardService } from 'src/modules/backoffice/application/services/customer/credit-card.service';
 import { CreateCreditCardContract } from 'src/modules/backoffice/domain/contracts/customer/create-credit-card.contract';
 import { CreateCreditCardDto } from 'src/modules/backoffice/domain/dtos/customer/create-credit-card.dto';

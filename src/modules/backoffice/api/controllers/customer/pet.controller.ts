@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, Put, UseInterceptors } from '@nestjs/com
 import { CreatePetContract } from 'src/modules/backoffice/domain/contracts/customer/create-pet.contract';
 import { CreatePetDto } from 'src/modules/backoffice/domain/dtos/customer/create-pet.dto';
 import { Result } from 'src/shared/result/result';
-import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
+import { ValidatorInterceptor } from 'src/shared/interceptors/validator.interceptor';
 import { PetService } from 'src/modules/backoffice/application/services/customer/pet.service';
 
 // localhost:5000/api/v1/pets

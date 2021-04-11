@@ -8,7 +8,7 @@ import { Result } from 'src/shared/result/result';
 import { User } from 'src/modules/backoffice/domain/models/user.model';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
 import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
-import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
+import { ValidatorInterceptor } from 'src/shared/interceptors/validator.interceptor';
 import { UpdateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/update-customer.contract';
 import { UpdateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/update-customer.dto';
 

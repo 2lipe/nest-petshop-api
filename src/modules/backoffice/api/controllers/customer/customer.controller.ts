@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { CreateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/create-customer.contract';
-import { CreatePaginationContract } from 'src/modules/backoffice/domain/contracts/create-pagination.contract';
+import { CreatePaginationContract } from 'src/shared/contracts/create-pagination.contract';
 import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
 import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';

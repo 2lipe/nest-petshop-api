@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
-import { Flunt } from 'src/helpers/flunt.helper';
-import { Contract } from 'src/modules/backoffice/domain/contracts/contract';
+import { Flunt } from 'src/shared/helpers/flunt.helper';
+import { BaseContract } from 'src/shared/contracts/base-contract';
 
 @Injectable()
-export class CreatePaginationContract implements Contract {
+export class CreatePaginationContract implements BaseContract {
   errors: any[];
 
   validate(model: PaginationQueryDto): boolean {

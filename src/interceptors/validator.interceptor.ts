@@ -3,12 +3,12 @@ import { HttpException } from '@nestjs/common';
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-import { Contract } from 'src/modules/backoffice/domain/contracts/contract';
 import { Result } from 'src/modules/backoffice/domain/models/result.model';
+import { BaseContract } from 'src/shared/contracts/base-contract';
 
 @Injectable()
 export class ValidatorInterceptor implements NestInterceptor {
-  constructor(public contract: Contract) {}
+  constructor(public contract: BaseContract) {}
 
   intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
     const body = context.switchToHttp().getRequest().body;

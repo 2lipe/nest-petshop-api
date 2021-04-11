@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Flunt } from 'src/helpers/flunt.helper';
+import { Flunt } from 'src/shared/helpers/flunt.helper';
 import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
-import { Contract } from 'src/modules/backoffice/domain/contracts/contract';
+import { BaseContract } from 'src/shared/contracts/base-contract';
 
 @Injectable()
-export class CreateCustomerContract implements Contract {
+export class CreateCustomerContract implements BaseContract {
   errors: any[];
 
   validate(model: CreateCustomerDto): boolean {

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { CreditCard } from 'src/modules/backoffice/domain/models/customer/credit-card.model';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
-import { Result } from 'src/shared/result/result';
+import { Result } from 'src/shared/helpers/result.helper';
 import { CustomerService } from 'src/modules/backoffice/application/services/customer/customer.service';
 
 interface CustomerModel extends Customer, Document {}

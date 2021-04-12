@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
+import { PaginationQueryDto } from 'src/shared/pagination/pagination-query.dto';
 import { Flunt } from 'src/shared/helpers/flunt.helper';
 import { BaseContract } from 'src/shared/contracts/base-contract';
 

@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { UpdateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/update-customer.dto';
-import { PaginationQueryDto } from 'src/modules/backoffice/domain/dtos/pagination-query.dto';
+import { PaginationQueryDto } from 'src/shared/pagination/pagination-query.dto';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
-import { Result } from 'src/shared/result/result';
+import { Result } from 'src/shared/helpers/result.helper';
 
 interface CustomerModel extends Customer, Document {}
 

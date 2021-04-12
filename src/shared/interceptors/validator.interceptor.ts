@@ -3,7 +3,7 @@ import { HttpException } from '@nestjs/common';
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-import { Result } from 'src/shared/result/result';
+import { Result } from 'src/shared/helpers/result.helper';
 import { BaseContract } from 'src/shared/contracts/base-contract';
 
 @Injectable()

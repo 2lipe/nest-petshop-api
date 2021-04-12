@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Result } from 'src/shared/result/result';
+import { Result } from 'src/shared/helpers/result.helper';
 import { ProductEntity } from 'src/modules/store/domain/entities/product.entity';
 import { CreateProductDto } from 'src/modules/store/domain/dtos/product/create-product.dto';
 import { UpdateProductDto } from 'src/modules/store/domain/dtos/product/update-product.dto';
@@ -27,7 +27,18 @@ export class ProductService {
   }
 
   public async findAllProducts(): Promise<ProductEntity[]> {
-    return await this._productRepository.find();
+    try {
+      const products = await this._productRepository.find();
+
+      if (products.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return products;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+      }
+    }
   }
 
   public async findProductById(id: string): Promise<ProductEntity> {

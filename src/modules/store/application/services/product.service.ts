@@ -93,7 +93,22 @@ export class ProductService {
     }
   }
 
-  public async deleteProduct(id: string): Promise<void> {
-    await this._productRepository.delete(id);
+  public async deleteProduct(id: string): Promise<boolean> {
+    try {
+      const product = await this.findProductById(id);
+
+      if (!product) {
+        throw new NotFoundException();
+      }
+
+      await this._productRepository.delete(product.id);
+
+      return true;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Ocorreu um erro ao excluir produto.', false, null, error.response),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

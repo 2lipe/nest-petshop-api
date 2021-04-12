@@ -5,6 +5,8 @@ import { ProductService } from 'src/modules/store/application/services/product.s
 import { CreateProductContract } from 'src/modules/store/domain/contracts/create-product.contract';
 import { CreateProductDto } from 'src/modules/store/domain/dtos/product/create-product.dto';
 import { UpdateProductDto } from 'src/modules/store/domain/dtos/product/update-product.dto';
+import { CreatePaginationContract } from 'src/shared/pagination/create-pagination.contract';
+import { PaginationQueryDto } from 'src/shared/pagination/pagination-query.dto';
 
 // localhost:5000/v1/products
 @Controller('v1/products')
@@ -32,5 +34,13 @@ export class ProductController {
     await this._productService.updateProduct(id, data);
 
     return new Result('Produto atualizado com sucesso!', true, data, null);
+  }
+
+  @Post('query')
+  @UseInterceptors(new ValidatorInterceptor(new CreatePaginationContract()))
+  async findProductsWithQuery(@Body() data: PaginationQueryDto) {
+    const res = await this._productService.findProducts(data);
+
+    return new Result('Busca por produtos realizada com sucesso!', true, res, null);
   }
 }

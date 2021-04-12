@@ -14,6 +14,10 @@ export class CreatePaginationContract implements BaseContract {
       model.query = {};
     }
 
+    if (!model.keyword) {
+      model.keyword = '';
+    }
+
     flunt.isGreaterThan(model.take, 1000, 'Busca máxima de 1000 registros');
 
     this.errors = flunt.errors;

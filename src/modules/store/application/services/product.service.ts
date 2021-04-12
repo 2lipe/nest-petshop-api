@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 import { Result } from 'src/shared/helpers/result.helper';
 import { ProductEntity } from 'src/modules/store/domain/entities/product.entity';
 import { CreateProductDto } from 'src/modules/store/domain/dtos/product/create-product.dto';
 import { UpdateProductDto } from 'src/modules/store/domain/dtos/product/update-product.dto';
+import { PaginationQueryDto } from 'src/shared/pagination/pagination-query.dto';
 
 @Injectable()
 export class ProductService {
@@ -26,9 +27,14 @@ export class ProductService {
     }
   }
 
-  public async findAllProducts(): Promise<ProductEntity[]> {
+  public async findProducts(query: PaginationQueryDto): Promise<ProductEntity[]> {
     try {
-      const products = await this._productRepository.find();
+      const products = await this._productRepository.find({
+        where: { title: Like('%' + query.keyword + '%') },
+        order: { title: 'DESC' },
+        take: query.take,
+        skip: query.skip,
+      });
 
       if (products.length === 0) {
         throw new NotFoundException();
@@ -37,7 +43,13 @@ export class ProductService {
       return products;
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Nenhum produto encontrado.', false, null, error));
       }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar produtos.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

@@ -1,4 +1,4 @@
-version: '2.4'
+version: '3'
 
 services:
   mongo:
@@ -11,21 +11,20 @@ services:
     volumes:
       - db-data:/data/db:delegated
 
-  mysql:
-    image: mysql:5.7
-    container_name: 'petshop-mysql_db'
-    environment:
-      MYSQL_DATABASE: 'petshop_db'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'reallyStrongPwd123'
-      MYSQL_ROOT_PASSWORD: 'reallyStrongRootPwd123'
+  postgres:
+    container_name: petshop-postgres_db
+    image: postgres:9.6
     ports:
-      - '3306:3306'
+      - 5432:5432
     expose:
-      - '3306'
+      - '5432'
+    environment:
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'reallyStrongPwd123'
+      POSTGRES_DB: 'petshop_db'
     volumes:
-      - my-db:/var/lib/mysql
+      - ./pgdata:/var/lib/postgresql
 
 volumes:
   db-data:
-  my-db:
+  pgdata:

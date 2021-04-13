@@ -1,9 +1,9 @@
 module.exports = {
-  type: 'mysql',
+  type: 'postgres',
   host: 'localhost',
-  port: 3306,
+  port: 5432,
   username: 'root',
-  password: 'reallyStrongRootPwd123',
+  password: 'reallyStrongPwd123',
   database: 'petshop_db',
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,

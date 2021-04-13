@@ -7,7 +7,7 @@ export class OrderEntity extends AbstractEntity {
   @Column({ length: 8 })
   number: string;
 
-  @Column('datetime')
+  @Column('timestamp with time zone')
   date: Date;
 
   @Column({ length: 11 })

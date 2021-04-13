@@ -8,4 +8,10 @@ export class ProductEntity extends AbstractEntity {
 
   @Column('text')
   description: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column('decimal')
+  quantityOnHand: number;
 }

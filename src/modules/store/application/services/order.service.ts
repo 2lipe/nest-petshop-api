@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderEntity } from 'src/modules/store/domain/entities/order.entity';
@@ -25,10 +25,44 @@ export class OrderService {
   }
 
   public async getByNumber(number: string): Promise<OrderEntity> {
-    return await this._orderRepository.findOne({ where: { number } });
+    try {
+      const order = await this._orderRepository.findOne({ where: { number } });
+
+      if (!order) {
+        throw new NotFoundException();
+      }
+
+      return order;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Não foi encontrado nenhum pedido.', false, null, null));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar pedido.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   public async getByCustomer(customer: string): Promise<OrderEntity[]> {
-    return await this._orderRepository.find({ where: { customer } });
+    try {
+      const order = await this._orderRepository.find({ where: { customer } });
+
+      if (order.length === 0) {
+        throw new NotFoundException();
+      }
+
+      return order;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Não foi encontrado nenhum pedido.', false, null, null));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao buscar pedido.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

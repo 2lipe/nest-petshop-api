@@ -4,7 +4,7 @@ import { Model, Document } from 'mongoose';
 import { Result } from 'src/shared/helpers/result.helper';
 import { User } from 'src/modules/backoffice/domain/models/user.model';
 
-interface UserModel extends User, Document {}
+export interface UserModel extends User, Document {}
 
 @Injectable()
 export class AccountService {

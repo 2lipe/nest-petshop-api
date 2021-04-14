@@ -12,6 +12,7 @@ import { CustomerService } from 'src/modules/backoffice/application/services/cus
 import { PetService } from 'src/modules/backoffice/application/services/customer/pet.service';
 import { CreditCardController } from 'src/modules/backoffice/api/controllers/customer/credit-card.controller';
 import { CreditCardService } from 'src/modules/backoffice/application/services/customer/credit-card.service';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CreditCardService } from 'src/modules/backoffice/application/services/c
         schema: UserSchema,
       },
     ]),
+    AuthModule,
   ],
   controllers: [AddressController, PetController, CreditCardController, CustomerController],
   providers: [AccountService, AddressService, PetService, CreditCardService, CustomerService],

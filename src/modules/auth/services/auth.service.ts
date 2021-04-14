@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { IJwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
+import { UserModel } from 'src/modules/backoffice/application/services/account/account.service';
+import { User } from 'src/modules/backoffice/domain/models/user.model';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly _accountService: AccountService, private readonly _jwtService: JwtService) {}
+  constructor(
+    @InjectModel('User') private readonly _userModel: Model<UserModel>,
+    private readonly _jwtService: JwtService,
+  ) {}
 
   public async createToken() {
     const user: IJwtPayload = { username: 'teste@email.com' };
@@ -18,6 +24,10 @@ export class AuthService {
   }
 
   public async validateUser(payload: IJwtPayload): Promise<any> {
-    return await this._accountService.findOneByUsername(payload.username);
+    return await this._findOneByUsername(payload.username);
+  }
+
+  private async _findOneByUsername(username: string) {
+    return new User(username, '123456789', true);
   }
 }

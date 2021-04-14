@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AddressController } from 'src/modules/backoffice/api/controllers/customer/address.controller';
 import { CustomerController } from 'src/modules/backoffice/api/controllers/customer/customer.controller';
 import { PetController } from 'src/modules/backoffice/api/controllers/customer/pet.controller';
+import { AccountController } from 'src/modules/backoffice/api/controllers/account/account.controller';
 import { CustomerSchema } from 'src/modules/backoffice/infrastructure/schemas/customer.schema';
 import { UserSchema } from 'src/modules/backoffice/infrastructure/schemas/user.schema';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
@@ -28,7 +29,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
     ]),
     AuthModule,
   ],
-  controllers: [AddressController, PetController, CreditCardController, CustomerController],
+  controllers: [AccountController, AddressController, PetController, CreditCardController, CustomerController],
   providers: [AccountService, AddressService, PetService, CreditCardService, CustomerService],
 })
 export class BackofficeModule {}

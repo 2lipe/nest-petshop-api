@@ -24,4 +24,8 @@ export class AccountService {
       );
     }
   }
+
+  public async findOneByUsername(username: string) {
+    return new User(username, '123456789', true);
+  }
 }

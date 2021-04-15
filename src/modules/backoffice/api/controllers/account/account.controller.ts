@@ -1,17 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-  Req,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { Guid } from 'guid-typescript';
 import { JwtAuthGuard } from 'src/modules/auth/guards/auth.guard';
-import { RoleInterceptor } from 'src/modules/auth/interceptors/role.interceptor';
 import { AuthService } from 'src/modules/auth/services/auth.service';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
 import { AuthenticateDto } from 'src/modules/backoffice/domain/dtos/account/authenticate.dto';
@@ -27,14 +16,6 @@ export class AccountController {
   @Post('authenticate')
   async autheticate(@Body() data: AuthenticateDto): Promise<any> {
     const customer = await this._accountService.authenticate(data.username, data.password);
-
-    if (!customer) {
-      throw new HttpException(new Result('Usuário ou senha inválidos', false, null, null), HttpStatus.BAD_REQUEST);
-    }
-
-    if (!customer.user.active) {
-      throw new HttpException(new Result('Usuário inativo', false, null, null), HttpStatus.FORBIDDEN);
-    }
 
     const token = await this._authService.createToken(customer.document, customer.email, '', customer.user.roles);
 
@@ -60,5 +41,18 @@ export class AccountController {
     await this._accountService.update(request.user.document, { password: data.newPassword });
 
     return new Result('Sua senha foi alterada com sucesso!', true, null, null);
+  }
+
+  @Post('refresh')
+  @UseGuards(JwtAuthGuard)
+  async refreshToken(@Req() request): Promise<any> {
+    const token = await this._authService.createToken(
+      request.document,
+      request.email,
+      request.user.image,
+      request.user.roles,
+    );
+
+    return new Result('Refresh feito com sucesso!', true, token, null);
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { CreateAddressContract } from 'src/modules/backoffice/domain/contracts/customer/create-address.contract';
 import { Result } from 'src/shared/helpers/result.helper';
 import { ValidatorInterceptor } from 'src/shared/interceptors/validator.interceptor';
@@ -24,5 +24,12 @@ export class AddressController {
     await this._addressService.addShippingAddress(document, model);
 
     return new Result('Endereço cadastrado com sucesso!', true, model, null);
+  }
+
+  @Get('search/:zipcode')
+  async search(@Param('zipcode') zipcode) {
+    const response = await this._addressService.getAddressByZipCode(zipcode);
+
+    return new Result('Cep buscado com sucesso!', true, response.data, null);
   }
 }

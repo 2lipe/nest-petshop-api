@@ -1,4 +1,4 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule, HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { AddressController } from 'src/modules/backoffice/api/controllers/customer/address.controller';
@@ -17,6 +17,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
+    HttpModule,
     CacheModule.register(),
     MongooseModule.forFeature([
       {

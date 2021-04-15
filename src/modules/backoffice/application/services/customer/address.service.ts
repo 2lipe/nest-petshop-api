@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpService, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { Address } from 'src/modules/backoffice/domain/models/customer/address.model';
@@ -14,6 +14,7 @@ export class AddressService {
     @InjectModel('Customer')
     private readonly _customerModel: Model<CustomerModel>,
     private readonly _customerService: CustomerService,
+    private readonly _httpService: HttpService,
   ) {}
 
   public async addBillingAddress(document: string, data: Address): Promise<Customer | undefined> {
@@ -61,6 +62,21 @@ export class AddressService {
     } catch (error) {
       throw new HttpException(
         new Result('Ocorreu um erro ao cadastrar endereço de entrega.', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  public async getAddressByZipCode(zipcode: string) {
+    try {
+      const url = `https://viacep.com.br/ws/${zipcode}/json/`;
+
+      const address = await this._httpService.get(url).toPromise();
+
+      return address;
+    } catch (error) {
+      throw new HttpException(
+        new Result('Não foi possível localizar seu endereço.', false, null, null),
         HttpStatus.BAD_REQUEST,
       );
     }

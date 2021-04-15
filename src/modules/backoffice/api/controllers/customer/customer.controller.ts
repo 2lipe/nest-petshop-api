@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, CacheInterceptor, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { Md5 } from 'md5-typescript';
 import { CreateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/create-customer.contract';
 import { CreatePaginationContract } from 'src/shared/pagination/create-pagination.contract';
@@ -41,6 +41,7 @@ export class CustomerController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async getAll() {
     const res = await this._customerService.findAll();
 

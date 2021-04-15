@@ -30,6 +30,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "dotenv": "^8.2.0",
     "guid-typescript": "^1.0.9",
+    "md5-typescript": "^1.0.5",
     "mongoose": "^5.12.3",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",

@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Md5 } from 'md5-typescript';
 import { CreateCustomerContract } from 'src/modules/backoffice/domain/contracts/customer/create-customer.contract';
 import { CreatePaginationContract } from 'src/shared/pagination/create-pagination.contract';
 import { CreateCustomerDto } from 'src/modules/backoffice/domain/dtos/customer/create-customer.dto';
@@ -20,7 +21,9 @@ export class CustomerController {
   @Post()
   @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
-    const user = await this._accountService.create(new User(model.document, model.password, true, ['user']));
+    const password = Md5.init(`${model.password}${process.env.SALT_KEY}`);
+
+    const user = await this._accountService.create(new User(model.document, password, true, ['user']));
 
     const customer = new Customer(model.name, model.document, model.email, [], null, null, null, user);
 

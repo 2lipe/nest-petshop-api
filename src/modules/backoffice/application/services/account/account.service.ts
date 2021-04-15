@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
+import { Md5 } from 'md5-typescript';
 import { Result } from 'src/shared/helpers/result.helper';
 import { User } from 'src/modules/backoffice/domain/models/user.model';
 import { Customer } from 'src/modules/backoffice/domain/models/customer/customer.model';
@@ -58,20 +59,20 @@ export class AccountService {
       const customer = await this._customerModel
         .findOne({
           'user.username': username,
-          'user.password': password,
         })
         .populate('user', '-password')
         .exec();
-
-      if (!customer) {
-        throw new HttpException(new Result('Usuário ou senha inválidos.', false, null, null), HttpStatus.NOT_FOUND);
-      }
 
       if (!customer.user.active) {
         throw new HttpException(new Result('Usuário inativo.', false, null, null), HttpStatus.UNAUTHORIZED);
       }
 
-      return customer;
+      const pass = Md5.init(`${password}${process.env.SALT_KEY}`);
+      if (pass.toString() === customer.user.password.toString()) {
+        return customer;
+      } else {
+        throw new HttpException(new Result('Usuário ou senha inválidos.', false, null, null), HttpStatus.NOT_FOUND);
+      }
     } catch (error) {
       throw new HttpException(
         new Result('Houve um erro ao realizar a autenticação.', false, null, error),

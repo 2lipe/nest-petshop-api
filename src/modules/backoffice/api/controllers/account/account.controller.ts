@@ -1,10 +1,21 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Guid } from 'guid-typescript';
 import { JwtAuthGuard } from 'src/modules/auth/guards/auth.guard';
 import { RoleInterceptor } from 'src/modules/auth/interceptors/role.interceptor';
 import { AuthService } from 'src/modules/auth/services/auth.service';
 import { AccountService } from 'src/modules/backoffice/application/services/account/account.service';
 import { AuthenticateDto } from 'src/modules/backoffice/domain/dtos/account/authenticate.dto';
+import { ChangePasswordDto } from 'src/modules/backoffice/domain/dtos/account/change-password.dto';
 import { ResetPasswordDto } from 'src/modules/backoffice/domain/dtos/account/reset-password.dto';
 import { Result } from 'src/shared/helpers/result.helper';
 
@@ -39,5 +50,15 @@ export class AccountController {
     await this._accountService.update(data.document, { password: password });
 
     return new Result('Uma nova senha foi enviada para o seu E-mail', true, null, null);
+  }
+
+  @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(@Req() request, @Body() data: ChangePasswordDto): Promise<any> {
+    //TODO: Encriptar password
+
+    await this._accountService.update(request.user.document, { password: data.newPassword });
+
+    return new Result('Sua senha foi alterada com sucesso!', true, null, null);
   }
 }

@@ -8,7 +8,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/petshop'),
+    MongooseModule.forRoot(process.env.CONNECTION_STRING),
     TypeOrmModule.forRoot(),
     BackofficeModule,
     StoreModule,

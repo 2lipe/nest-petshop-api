@@ -15,9 +15,9 @@ import { UserSchema } from 'src/modules/backoffice/infrastructure/schemas/user.s
       },
     ]),
     JwtModule.register({
-      secret: 'secretKey',
+      secret: process.env.JWT_SECRET,
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: Number(process.env.JWT_EXPIRES),
       },
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),

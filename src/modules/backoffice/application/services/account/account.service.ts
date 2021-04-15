@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Document } from 'mongoose';
 import { Result } from 'src/shared/helpers/result.helper';
@@ -25,6 +25,29 @@ export class AccountService {
     } catch (error) {
       throw new HttpException(
         new Result('Ocorreu um erro ao realizar o cadastro de usuário', false, null, error),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  public async update(username: string, data: any): Promise<User> {
+    try {
+      const user = await this._userModel.findOne({ username });
+
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      await this._customerModel.update({ username }, data);
+
+      return user;
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(new Result('Nenhum usuário encontrado.', false, null, error));
+      }
+
+      throw new HttpException(
+        new Result('Ocorreu um erro ao atualizar dados usuario.', false, null, error),
         HttpStatus.BAD_REQUEST,
       );
     }

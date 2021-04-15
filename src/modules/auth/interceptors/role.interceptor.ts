@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, HttpException, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Result } from 'src/shared/helpers/result.helper';
-import { IJwtPayload } from '../interfaces/jwt-payload.interface';
+import { IJwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class RoleInterceptor implements NestInterceptor {

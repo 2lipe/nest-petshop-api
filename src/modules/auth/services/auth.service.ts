@@ -14,7 +14,13 @@ export class AuthService {
   ) {}
 
   public async createToken() {
-    const user: IJwtPayload = { username: 'teste@email.com' };
+    const user: IJwtPayload = {
+      document: '12345678911',
+      email: 'felipe@teste.com',
+      image: 'assets/images/user.png',
+      roles: ['admin'],
+    };
+
     const accessToken = this._jwtService.sign(user);
 
     return {
@@ -24,7 +30,9 @@ export class AuthService {
   }
 
   public async validateUser(payload: IJwtPayload): Promise<any> {
-    return await this._findOneByUsername(payload.username);
+    return payload;
+
+    // const user = await this._findOneByUsername(payload.document); (Ler a role do banco)
   }
 
   private async _findOneByUsername(username: string) {

@@ -16,6 +16,15 @@ export const UserSchema = new mongoose.Schema({
     trim: true,
   },
 
+  roles: [
+    {
+      type: String,
+      required: true,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
+  ],
+
   active: {
     type: Boolean,
     required: true,

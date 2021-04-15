@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IJwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
 import { UserModel } from 'src/modules/backoffice/application/services/account/account.service';
-import { User } from 'src/modules/backoffice/domain/models/user.model';
+//import { User } from 'src/modules/backoffice/domain/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -13,20 +13,15 @@ export class AuthService {
     private readonly _jwtService: JwtService,
   ) {}
 
-  public async createToken() {
+  public async createToken(document: string, email: string, image: string, roles: string[]) {
     const user: IJwtPayload = {
-      document: '12345678911',
-      email: 'felipe@teste.com',
-      image: 'assets/images/user.png',
-      roles: ['admin'],
+      document: document,
+      email: email,
+      image: image,
+      roles: roles,
     };
 
-    const accessToken = this._jwtService.sign(user);
-
-    return {
-      expiresIn: 3600,
-      accessToken,
-    };
+    return this._jwtService.sign(user);
   }
 
   public async validateUser(payload: IJwtPayload): Promise<any> {
@@ -35,7 +30,7 @@ export class AuthService {
     // const user = await this._findOneByUsername(payload.document); (Ler a role do banco)
   }
 
-  private async _findOneByUsername(username: string) {
-    return new User(username, '123456789', true);
-  }
+  // private async _findOneByUsername(username: string) {
+  //   return new User(username, '123456789', true);
+  // }
 }

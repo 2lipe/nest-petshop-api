@@ -5,5 +5,7 @@ export class Room extends AggregateRoot {
     super();
   }
 
-  public book(customerId: string) {}
+  public book(customerId: string) {
+    console.log('RoomModel');
+  }
 }
